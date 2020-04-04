@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ResponseMDB } from '../interfaces/interfaces';
+import { environment } from '../../environments/environment';
+
+const URL = environment.url;
+const APIKEY = environment.apiKey;
 
 @Injectable({
   providedIn: 'root'
@@ -9,10 +13,44 @@ export class MoviesService {
 
   constructor( private http: HttpClient ) { }
 
+  private executeQuery<T>( query: string ) {
+    query = URL + query;
+    query += `&api_key=${APIKEY}&language=es&include_image_language=es`;
+    return this.http.get<T>( query );
+  }
+
   getMovies() {
 
-    // tslint:disable-next-line: max-line-length
-    return this.http.get<ResponseMDB>(`https://api.themoviedb.org/3/discover/movie?primary_release_date.gte=2014-09-15&primary_release_date.lte=2014-10-22&api_key=fdc47c098c5ef33a532b58cd659210cb&language=es&include_image_language=es`);
+    const filterDate = this.firstAndLastDayInMonth();
+
+    const init = filterDate.firstDate;
+    const end = filterDate.lastDate;
+
+    return this.executeQuery<ResponseMDB>(`/discover/movie?primary_release_date.gte=${init}&primary_release_date.lte=${end}`);
+
+  }
+
+  private getMounthFormat( month: number ): string {
+
+    let monthRes;
+    if ( month < 10) {
+      monthRes = '0' + month;
+    } else {
+      monthRes = month;
+    }
+    return monthRes;
+
+  }
+
+  private firstAndLastDayInMonth(): any {
+
+    const now = new Date();
+    const lastDate = new Date( now.getFullYear(), now.getMonth() + 1, 0 ).getDate();
+
+    return {
+      firstDate: `${ now.getFullYear() }-${ this.getMounthFormat(now.getMonth() + 1) }-01`,
+      lastDate: `${ now.getFullYear() }-${ this.getMounthFormat(now.getMonth() + 1) }-${lastDate}`
+    };
 
   }
 
