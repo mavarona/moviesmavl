@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Movie } from 'src/app/interfaces/interfaces';
+import { ModalController } from '@ionic/angular';
+import { DetailMovieComponent } from '../detail-movie/detail-movie.component';
 
 @Component({
   selector: 'app-slideshow-pairs',
@@ -17,12 +19,25 @@ export class SlideshowPairsComponent implements OnInit {
   @Input() movies: Movie[] = [];
   @Output() loadMore = new EventEmitter();
 
-  constructor() { }
+  constructor( private modalCtrl: ModalController ) { }
 
   ngOnInit() {}
 
   LoadMore() {
     this.loadMore.emit();
+  }
+
+  async viewDetail(id: string) {
+
+    const modal = await this.modalCtrl.create({
+      component: DetailMovieComponent,
+      componentProps: {
+        id
+      }
+    });
+
+    modal.present();
+
   }
 
 }

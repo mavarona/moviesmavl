@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ResponseMDB } from '../interfaces/interfaces';
+import { ResponseMDB, MovieDetail, ResponseCredits } from '../interfaces/interfaces';
 import { environment } from '../../environments/environment';
 
 const URL = environment.url;
@@ -40,6 +40,14 @@ export class MoviesService {
 
     return this.executeQuery<ResponseMDB>(query);
 
+  }
+
+  getMovieDetail( id: string ) {
+    return this.executeQuery<MovieDetail>(`/movie/${ id }?a=1`);
+  }
+
+  getMovieDetailCredits( id: string ) {
+    return this.executeQuery<ResponseCredits>(`/movie/${ id }/credits?a=1`);
   }
 
   private getMounthFormat( month: number ): string {
