@@ -30,6 +30,14 @@ export class MoviesService {
 
   }
 
+  getPopular() {
+
+    const query = '/discover/movie?sort_by=popularity.desc';
+
+    return this.executeQuery<ResponseMDB>(query);
+
+  }
+
   private getMounthFormat( month: number ): string {
 
     let monthRes;
