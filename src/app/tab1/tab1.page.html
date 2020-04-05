@@ -15,7 +15,8 @@
   <app-slides-title [title]="'Populares'">
   </app-slides-title>
 
-  <app-slideshow-pairs [movies]="popular">
+  <app-slideshow-pairs [movies]="popular"
+                       (loadMore)="loadMore()">
   </app-slideshow-pairs>
 
 </ion-content>
