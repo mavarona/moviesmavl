@@ -1,4 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { MoviesService } from 'src/app/services/movies.service';
+import { MovieDetail, Cast } from '../../interfaces/interfaces';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-detail-movie',
@@ -8,9 +11,36 @@ import { Component, OnInit, Input } from '@angular/core';
 export class DetailMovieComponent implements OnInit {
 
   @Input() id;
+  hideText = 150;
 
-  constructor() { }
+  slideOptActors = {
+    slidesPerView: 3.3,
+    freeMode: true,
+    spaceBetween: 0
+  };
 
-  ngOnInit() {}
+  movie: MovieDetail = {};
+  actors: Cast[] = [];
+
+  constructor( private movieService: MoviesService,
+               private ctrlModal: ModalController ) { }
+
+  ngOnInit() {
+
+    this.movieService.getMovieDetail( this.id )
+        .subscribe( resp => {
+          this.movie = resp;
+        });
+
+    this.movieService.getMovieCredits( this.id )
+        .subscribe( resp => {
+          this.actors = resp.cast;
+        });
+
+  }
+
+  back() {
+    this.ctrlModal.dismiss();
+  }
 
 }

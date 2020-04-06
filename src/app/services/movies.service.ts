@@ -15,12 +15,6 @@ export class MoviesService {
 
   constructor( private http: HttpClient ) { }
 
-  private executeQuery<T>( query: string ) {
-    query = URL + query;
-    query += `&api_key=${APIKEY}&language=es&include_image_language=es`;
-    return this.http.get<T>( query );
-  }
-
   getMovies() {
 
     const filterDate = this.firstAndLastDayInMonth();
@@ -43,11 +37,19 @@ export class MoviesService {
   }
 
   getMovieDetail( id: string ) {
+
     return this.executeQuery<MovieDetail>(`/movie/${ id }?a=1`);
+
   }
 
-  getMovieDetailCredits( id: string ) {
+  getMovieCredits( id: string ) {
     return this.executeQuery<ResponseCredits>(`/movie/${ id }/credits?a=1`);
+  }
+
+  private executeQuery<T>( query: string ) {
+    query = URL + query;
+    query += `&api_key=${APIKEY}&language=es&include_image_language=es`;
+    return this.http.get<T>( query );
   }
 
   private getMounthFormat( month: number ): string {
