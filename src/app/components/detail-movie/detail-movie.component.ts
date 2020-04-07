@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { MoviesService } from 'src/app/services/movies.service';
 import { MovieDetail, Cast } from '../../interfaces/interfaces';
 import { ModalController } from '@ionic/angular';
+import { DataLocalService } from '../../services/data-local.service';
 
 @Component({
   selector: 'app-detail-movie',
@@ -23,7 +24,8 @@ export class DetailMovieComponent implements OnInit {
   actors: Cast[] = [];
 
   constructor( private movieService: MoviesService,
-               private ctrlModal: ModalController ) { }
+               private ctrlModal: ModalController,
+               private dataLocal: DataLocalService ) { }
 
   ngOnInit() {
 
@@ -43,7 +45,7 @@ export class DetailMovieComponent implements OnInit {
     this.ctrlModal.dismiss();
   }
   favorite() {
-    console.log('Add to favorite');
+    this.dataLocal.saveMovie( this.movie );
   }
 
 
