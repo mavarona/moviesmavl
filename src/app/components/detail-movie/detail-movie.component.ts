@@ -42,5 +42,9 @@ export class DetailMovieComponent implements OnInit {
   back() {
     this.ctrlModal.dismiss();
   }
+  favorite() {
+    console.log('Add to favorite');
+  }
+
 
 }

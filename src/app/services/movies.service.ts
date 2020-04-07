@@ -46,6 +46,10 @@ export class MoviesService {
     return this.executeQuery<ResponseCredits>(`/movie/${ id }/credits?a=1`);
   }
 
+  getMovieSearch( term: string ) {
+    return this.executeQuery(`/search/movie?query=${ term }`);
+  }
+
   private executeQuery<T>( query: string ) {
     query = URL + query;
     query += `&api_key=${APIKEY}&language=es&include_image_language=es`;
