@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ResponseMDB, MovieDetail, ResponseCredits } from '../interfaces/interfaces';
+import { ResponseMDB, MovieDetail, ResponseCredits, Genre } from '../interfaces/interfaces';
 import { environment } from '../../environments/environment';
 
 const URL = environment.url;
@@ -12,6 +12,7 @@ const APIKEY = environment.apiKey;
 export class MoviesService {
 
   private popularPage = 0;
+  genres: Genre[] = [];
 
   constructor( private http: HttpClient ) { }
 
@@ -48,6 +49,18 @@ export class MoviesService {
 
   getMovieSearch( term: string ) {
     return this.executeQuery(`/search/movie?query=${ term }`);
+  }
+
+  getGenres(): Promise<Genre[]> {
+
+    return new Promise( resolve => {
+      this.executeQuery(`/genre/movie/list?a=1`)
+      .subscribe( resp => {
+        this.genres = resp['genres'];
+        resolve(this.genres);
+      });
+    });
+
   }
 
   private executeQuery<T>( query: string ) {

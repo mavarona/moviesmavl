@@ -13,6 +13,7 @@ export class DetailMovieComponent implements OnInit {
 
   @Input() id;
   hideText = 150;
+  starIcon = 'star';
 
   slideOptActors = {
     slidesPerView: 3.3,
@@ -28,6 +29,9 @@ export class DetailMovieComponent implements OnInit {
                private dataLocal: DataLocalService ) { }
 
   ngOnInit() {
+
+    this.dataLocal.existMovie( this.id )
+    .then( exist => this.starIcon = ( exist ) ? 'star' : 'star-outline' );
 
     this.movieService.getMovieDetail( this.id )
         .subscribe( resp => {
@@ -45,7 +49,8 @@ export class DetailMovieComponent implements OnInit {
     this.ctrlModal.dismiss();
   }
   favorite() {
-    this.dataLocal.saveMovie( this.movie );
+    const exist = this.dataLocal.saveMovie( this.movie );
+    this.starIcon = ( exist ) ? 'star' : 'star-outline';
   }
 
 
